@@ -1,0 +1,12 @@
+1. NQueen - https://www.acmicpc.net/problem/9663 (완)
+2. 고스택 - https://www.acmicpc.net/problem/3425 (실) - 레알 쌉 구현문제.
+3. 후보 추천하기 - https://www.acmicpc.net/problem/1713 (X)
+4. 단어 수학 - https://www.acmicpc.net/problem/1339 (완)
+5. 가르침 - https://www.acmicpc.net/problem/1062 (X)
+6. 암호 만들기 - https://www.acmicpc.net/problem/1759 (완)
+7. 스도쿠 - https://www.acmicpc.net/problem/2580 (X)
+8. 게임 - https://www.acmicpc.net/problem/1103 (실) - 시간 초과 (커팅 필요)
+9. 치킨 배달 - https://www.acmicpc.net/problem/15686 (X)
+10. 교환 - https://www.acmicpc.net/problem/1039 (실)
+11. 수 찾기 - https://www.acmicpc.net/problem/1920 (X)
+12. 탈출 - https://www.acmicpc.net/problem/3055 (X)
