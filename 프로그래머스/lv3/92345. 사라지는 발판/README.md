@@ -1,6 +1,7 @@
 # [level 3] 사라지는 발판 - 92345 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/92345) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/92345)  
+[나의 문제 풀이 링크](https://gnuoyus.tistory.com/91)
 
 ### 성능 요약
 
