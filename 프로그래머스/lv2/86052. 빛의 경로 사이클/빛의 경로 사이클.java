@@ -1,17 +1,5 @@
 import java.util.*;
 
-class Point {
-    int x;
-    int y;
-    int d;
-    
-    Point (int x, int y, int d) {
-        this.x = x;
-        this.y = y;
-        this.d = d;
-    }
-}
-
 class Solution {
     
     private static final int DIR_NUM = 4, MAX_SIZE = 500;
