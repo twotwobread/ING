@@ -1,6 +1,7 @@
 # [Silver III] 진우의 달 여행 (Small) - 17484 
 
-[문제 링크](https://www.acmicpc.net/problem/17484) 
+[문제 링크](https://www.acmicpc.net/problem/17484)   
+[문제 풀이 링크](https://gnuoyus.tistory.com/105)
 
 ### 성능 요약
 
