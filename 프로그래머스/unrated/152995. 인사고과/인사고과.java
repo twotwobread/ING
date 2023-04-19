@@ -1,106 +1,69 @@
+// 스코어를 근무 점수가 높은 순으로 정렬하고 같다면 동료 점수가 낮은 순으로 정렬한다면
+// 앞에서부터 for문을 돌 때, 근무 점수는 낮아질 것이고 만약 근무 점수가 같다고 해도 동료 점수는 같거나 무조건 높아집니다.
+// 이를 이용해서 해결해보면
+// 1. 최대 동료 점수를 가지고 있고 이것보다 높거나 같은 경우라면 최대 동료 점수를 계속 갱신시킵니다.
+// 2. 만약 최대 동료 점수보다 낮아진다면 이건 근무 점수가 더 낮은 수로 바뀐 경우가 되고 그 때 동료 점수도 낮아진 것이 되니까
+//    그게 완호의 점수랑 같으면 완호는 인센티브를 못받게 되는 겁니다.
+// 3. 그리고 위에서 최대 동료 점수를 갱신할 때마다 완호보다 점수가 높은지를 체크하고 높으면 갯수를 올리고 이게 완호보다 더 랭킹이 높은
+//    사람을 의미하기에 이를 이용해서 처리를 해봅시다.
+
 import java.util.*;
 
-class Info implements Comparable<Info> {
-    boolean isWanho;
-    int workPoint;
-    int peerPoint;
-
-    public Info(boolean isWanho, int workPoint, int peerPoint) {
-        this.isWanho = isWanho;
-        this.workPoint = workPoint;
-        this.peerPoint = peerPoint;
+class Score implements Comparable<Score> {
+    int attitude;
+    int peer;
+    
+    public Score(int attitude, int peer) {
+        this.attitude = attitude;
+        this.peer = peer;
     }
-
+    
+    @Override
+    public int compareTo(Score s) {
+        if (attitude == s.attitude) {
+            return peer - s.peer;
+        }
+        return s.attitude - attitude;
+    }
+    
+    public boolean equals(Score s) {
+        return attitude == s.attitude && peer == s.peer;
+    }
+    
     public int getSum() {
-        return workPoint + peerPoint;
-    }
-
-    public boolean isBiggerAllPoint(Info info) {
-        return workPoint > info.workPoint && peerPoint > info.peerPoint;
-    }
-
-    @Override
-    public int compareTo(Info info) {
-        return info.getSum() - getSum();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("완호:%s, 태도점수:%s, 동료점수:%s", isWanho, workPoint, peerPoint);
+        return attitude + peer;
     }
 }
 
 class Solution {
-    private List<Info> infoArr = new ArrayList<>();
-
+    private List<Score> scoreList = new ArrayList<>();
+    
     public int solution(int[][] scores) {
         initialize(scores);
-        Collections.sort(infoArr);
-        int index = getFindWanho();
-        if (isPossibleGetIncentive(index)) {
-            return getWanhoRank(index);
-        } else {
-            return -1;
-        }
+        Collections.sort(scoreList);
+        return getWanhoRank(new Score(scores[0][0], scores[0][1]));
     }
-
-    private int getWanhoRank(int index) {
-        Info wanhoInfo = infoArr.get(index);
-        int higherFailerCnt = countHigherPointFailer(index, wanhoInfo);
-        return (index+1) - higherFailerCnt;
-    }
-
-    private int countHigherPointFailer(int index, Info goal) {
-        int cnt = 0;
-        for (int i = index - 1; i >= 0; i--) {
-            Info nowInfo = infoArr.get(i);
-            if (goal.getSum() == nowInfo.getSum()) {
-                cnt += 1;
-                continue;
-            }
-            for (int j = i - 1; j >= 0; j--) {
-                if (infoArr.get(j).isBiggerAllPoint(nowInfo)) {
-                    cnt += 1;
-                    break;
+    
+    private int getWanhoRank(Score wanho) {
+        int maxPeerPoint = 0, ranking = 0;
+        for (Score s : scoreList) {
+            if (maxPeerPoint > s.peer) {
+                if (s.equals(wanho)) {
+                    return -1;
+                }
+            } else {
+                maxPeerPoint = Math.max(maxPeerPoint, s.peer);
+                if (wanho.getSum() < s.getSum()) {
+                    ranking += 1;
                 }
             }
         }
-        return cnt;
+        return ranking + 1;
     }
-
-    private boolean isPossibleGetIncentive(int index) {
-        Info wanhoInfo = infoArr.get(index);
-        for (int i = index - 1; i >= 0; i--) {
-            if (infoArr.get(i).isBiggerAllPoint(wanhoInfo)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private int getFindWanho() {
-        for (int i = 0; i < infoArr.size(); i++) {
-            if (infoArr.get(i).isWanho)
-                return i;
-        }
-        return -1;
-    }
-
+    
     private void initialize(int[][] scores) {
-        for (int i = 0; i < scores.length; i++) {
-            if (i == 0) {
-                infoArr.add(new Info(true, scores[i][0], scores[i][1]));
-            } else {
-                infoArr.add(new Info(false, scores[i][0], scores[i][1]));
-            }
+        for (int[] score : scores) {
+            scoreList.add(new Score(score[0], score[1]));
         }
-    }
-
-    private void printArr() {
-        System.out.println("infoArr 출력하기");
-        for (int i = 0; i < infoArr.size(); i++) {
-            System.out.println(infoArr.get(i));    
-        }
-        System.out.println();
     }
 }
