@@ -46,7 +46,7 @@ public class Main {
         for (List<Point> archers : allArchers) {
             int cnt = 0;
             int[][] perGrid = new int[n][m];
-            copyGrid(perGrid);
+            copyGrid(perGrid, grid);
             while(!isEndGame(perGrid)) {
                 cnt += attack(archers, perGrid);
                 move(perGrid);
@@ -57,7 +57,7 @@ public class Main {
     }
     
     
-    private static void copyGrid (int[][] perGrid) {
+    private static void copyGrid (int[][] perGrid, int[][] grid) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 perGrid[i][j] = grid[i][j];
@@ -129,18 +129,14 @@ public class Main {
             }
         }
         
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                grid[i][j] = newGrid[i][j];
-            }
-        }
+        copyGrid(grid, newGrid);
     }
     private static boolean inRange(int x, int y) {
         return 0 <= x && x < n && 0 <= y && y < m;
     }
     
     
-    private static void initialize() throws IOException {
+    public static void initialize() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] tmp = br.readLine().split(" ");
         n = Integer.parseInt(tmp[0]);
@@ -155,22 +151,6 @@ public class Main {
                 grid[i][j] = Integer.parseInt(tmp[j]);
             }
         }
-    }
-    private static void printArr(int[][] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr[0].length; j++) {
-                System.out.print(String.format("%s ", arr[i][j]));
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-    private static void printArchers(List<Point> archers) {
-        System.out.println("아처 정보 : ");
-        for (Point a : archers) {
-            System.out.print(a);
-        }
-        System.out.println();
     }
 }
 
