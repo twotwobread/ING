@@ -21,13 +21,12 @@ public class Main {
     private static int result = 0;
     private static int[][] A = new int[MAX_N][MAX_N];
     private static int[][] energy = new int[MAX_N][MAX_N];
-    private static List<List<List<Tree>>> tree = new ArrayList<>();
+    private static List<Tree> trees = new ArrayList<>();
     
     public static void main(String args[]) throws IOException {
         initialize();
         simulate();
-        result = countAliveTree();
-        System.out.println(result);
+        System.out.println(trees.size());
     }
     
     private static void simulate() {
@@ -39,70 +38,45 @@ public class Main {
         }
     }
     
-    private static int countAliveTree() {
-        int cnt = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                cnt += tree.get(i).get(j).size(); 
-            }
-        }
-        return cnt;
-    }
-    
     private static void spring() {
         // 1. 봄 -> 나무 나이만큼 양분먹기(자기가 있는 칸) 후 나이 1증가
         //      a. 하나의 칸에 여러 나무 존재 시 가장 어린 나무부터 양분먹기.
         //      b. 땅 양분이 자신의 나이만큼 존재 X -> 해당 나무 죽음.
         sortTree();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int e = energy[i][j];
-                for (int k = 0; k < tree.get(i).get(j).size(); k++) {
-                    Tree now = tree.get(i).get(j).get(k);
-                    if (e >= now.age) {
-                        e -= now.age;
-                        now.grow();
-                    } else {
-                        now.kill();
-                    }
-                }
-                energy[i][j] = e;
+        for (Tree t : trees) {
+            if (energy[t.x][t.y] >= t.age) {
+                energy[t.x][t.y] -= t.age;
+                t.grow();
+            } else {
+                t.kill();
             }
         }
     }
     
     private static void summer() {
         // 2. 여름 -> 죽은 나무가 해당 칸의 양분으로 변함 -> 나이 / 2 (소수점 버림)
-        for (int i = 0 ; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                List<Tree> tmp = new ArrayList<>();
-                for (int k = 0; k < tree.get(i).get(j).size(); k++) {
-                    Tree now = tree.get(i).get(j).get(k);
-                    if (now.isDead) {
-                        energy[i][j] += (now.age / 2);
-                    } else {
-                        tmp.add(now);
-                    }
-                }
-                tree.get(i).get(j).clear();
-                
-                for (int k = 0; k < tmp.size(); k++) {
-                    tree.get(i).get(j).add(new Tree(tmp.get(k).age));
-                }
+        List<Tree> newTrees = new ArrayList<>();
+        for (Tree t : trees) {
+            if (t.isDead) {
+                energy[t.x][t.y] += (t.age / 2);
+            } else {
+                newTrees.add(new Tree(t.x, t.y, t.age));  
             }
+        }
+        
+        trees.clear();
+        for (Tree t : newTrees) {
+            trees.add(t);
         }
     }
     
     private static void fall() {
         // 3. 가을 -> 나이가 5의 배수인 나무 번식 (인점한 8개 칸에 나이 1인 나무 생성).
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < tree.get(i).get(j).size(); k++) {
-                    Tree now = tree.get(i).get(j).get(k);
-                    if (now.canBreeding()) {
-                        breedTree(i, j);
-                    }
-                }
+        int size = trees.size();
+        for (int i = 0; i < size; i++) {
+            Tree t = trees.get(i);
+            if (t.canBreeding()) {
+                breedTree(t.x, t.y);
             }
         }
     }
@@ -112,7 +86,7 @@ public class Main {
             int ny = y + dy[i];
             
             if (inRange(nx, ny)) {
-                tree.get(nx).get(ny).add(new Tree(1));
+                trees.add(new Tree(nx, ny, 1));
             }
         }
     }
@@ -144,9 +118,7 @@ public class Main {
         }
         
         for (int i = 0; i < n; i++) {
-            tree.add(new ArrayList<>());
             for (int j = 0; j < n; j++) {
-                tree.get(i).add(new ArrayList<>(new ArrayList<>()));
                 energy[i][j] = 5;
             }
         }
@@ -158,24 +130,24 @@ public class Main {
             int y = Integer.parseInt(tmp[1]) - 1;
             int z = Integer.parseInt(tmp[2]);
             
-            tree.get(x).get(y).add(new Tree(z));
+            trees.add(new Tree(x, y, z));
         }
     }
     
     private static void sortTree() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                Collections.sort(tree.get(i).get(j));
-            }
-        }
+        Collections.sort(trees);
     }
 }
 
 class Tree implements Comparable<Tree> {
+    int x;
+    int y;
     int age;
     boolean isDead;
     
-    Tree (int age) {
+    Tree (int x, int y, int age) {
+        this.x = x;
+        this.y = y;
         this.age = age;
         this.isDead = false;
     }
