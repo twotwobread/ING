@@ -1,6 +1,7 @@
 # [Gold II] K번째 수 - 1300 
 
-[문제 링크](https://www.acmicpc.net/problem/1300) 
+[문제 링크](https://www.acmicpc.net/problem/1300)  
+[문제 풀이 링크](https://gnuoyus.tistory.com/manage/posts/)
 
 ### 성능 요약
 
