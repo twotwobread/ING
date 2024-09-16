@@ -5,6 +5,7 @@
 - 위 성질을 이용해서 체로 거르듯 판별.
 - loop을 낮은 수부터 돌면서 그 수가 소수일 때, 배수들은 모두 소수가 아님을 flagging. (이를 특정 확인하고자 하는 수 이하까지만 확인)
 ## 코드
+- https://www.codetree.ai/missions/4/problems/get-prime/description
 ```go
 package main
 
