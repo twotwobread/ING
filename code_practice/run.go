@@ -49,5 +49,9 @@ func seg_run() {
 }
 
 func main() {
-	seg_run()
+	// seg_run()
+	v := 10
+	pV := &v
+	println(pV)
+	println(*pV)
 }

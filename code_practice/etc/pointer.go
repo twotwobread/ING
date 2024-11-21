@@ -40,3 +40,7 @@ func (d *Dog) Move(x, y int) {
 func (d *Dog) Sleep(t int) {
 	fmt.Printf("%s sleep during %d seconds", d.name, t)
 }
+
+func NewAnimal() Animal {
+	return &Dog{name: "Max"}
+}
